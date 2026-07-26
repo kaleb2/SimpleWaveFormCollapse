@@ -36,7 +36,39 @@ class Tile:
         else:
              return '_'
 
-        
+    def set_color_off(self, c):
+        if c == 'r':
+            self.can_be_red = False
+        elif c == 'g':
+            self.can_be_green = False
+        elif c == 'b':
+            self.can_be_blue = False
+
+    def is_collapsed(self):
+        return len([t for t in [self.can_be_blue, self.can_be_green, self.can_be_red] if t == True]) == 1
+         
+def get_neighbor_indices(x, y):
+    x_neighbors = []
+    if x == 1:
+         x_neighbors.append(2)
+    elif x == board_size:
+        x_neighbors.append(x - 1)
+    else:
+        x_neighbors.append(x - 1)
+        x_neighbors.append(x + 1)
+
+    y_neighbors = []
+    if y == 1:
+        y_neighbors.append(2)
+    elif y == board_size:
+        y_neighbors.append(y - 1)
+    else:
+        y_neighbors.append(y - 1)
+        y_neighbors.append(y + 1)
+
+    neighbors = list(zip([x] * len(y_neighbors), y_neighbors)) + list(zip(x_neighbors, [y] * len(x_neighbors)))
+    return neighbors
+
      
 
 if __name__ == "__main__":
@@ -65,6 +97,17 @@ if __name__ == "__main__":
             [Tile('_'), Tile('_'), Tile('_'), Tile('_'), Tile('_')]]
     
     board[y][x] = Tile(c)
-
     print_board(board)
 
+    stack = get_neighbor_indices(x, y)
+
+    for i in stack:
+        board[i[1]][i[0]].set_color_off(c)
+
+    print(stack)
+
+    while len(stack) != 0:
+        index = stack.pop()
+
+
+    print(stack)
